@@ -44,31 +44,40 @@ sequelize.sync().then(function(){
 	Quiz.count().then(function(count){
 		if(count===0){ //la tabla se inicializa solo si esta vacia
 			Quiz.create({pregunta: 'Capital de Italia',
-				respuesta: 'Roma'
+				respuesta: 'Roma',
+				tema: 'Geografia'
 			});
 			Quiz.create({pregunta: 'Capital de Portugal',
-				respuesta: 'Lisboa'
+				respuesta: 'Lisboa',
+				tema: 'Geografia'
 			});
 			Quiz.create({pregunta: 'Capital de Colombia',
-				respuesta: 'Bogota'
-			});
-			Quiz.create({pregunta: 'Capital de Brasil',
-				respuesta: 'Brasilia'
-			});
+				respuesta: 'Bogota',
+				tema: 'Geografia'
+			});			
 			Quiz.create({pregunta: 'Capital de Argentina',
-				respuesta: 'Buenos Aires'
+				respuesta: 'Buenos Aires',
+				tema: 'Geografia'
 			});
 			Quiz.create({pregunta: 'Capital de Alemania',
-				respuesta: 'Berlin'
+				respuesta: 'Berlin',
+				tema: 'Geografia'
 			});
-			Quiz.create({pregunta: 'Capital de Francia',
-				respuesta: 'Paris'
+			Quiz.create({pregunta: 'Formula del Agua',
+				respuesta: 'H2O',
+				tema: 'Ciencias'
 			});
-			Quiz.create({pregunta: 'Capital de Japon',
-				respuesta: 'Tokio'
+			Quiz.create({pregunta: 'Escritor de 100 Años de Soledad',
+				respuesta: 'Gabriel Garcia Marquez',
+				tema: 'Humanidades'
+			});
+			Quiz.create({pregunta: 'Unidad Central de Proceso',
+				respuesta: 'CPU',
+				tema: 'Tecnologia'
 			});			
 			Quiz.create({pregunta: 'Capital de Rusia',
-				respuesta: 'Moscu'
+				respuesta: 'Moscu',
+				tema: 'Geografia'
 			})
 			.then(function(){console.log('Base de Datos Inicializada')});
 		};
