@@ -5,17 +5,19 @@ var tema=["Otro","Geografia","Humanidades","Ocio","Ciencia","Tecnologia"]
 
 //Autoload - factoriza el cod si ruta incluye :quizId
 exports.load=function(req,res,next,quizId){
-	models.Quiz.find(quizId).then(
-		function(quiz){
-			if (quiz) {
-				req.quiz=quiz;
-				next();
-			}else{
-				next(new Error('No existe quizId = '+quizId));
-			}
-		}).catch(function(error){
-			next(error);
-		});
+	models.Quiz.find({
+			where: {id: Number(quizId)},
+			include: [{model: models.Comment}]
+		}).then(
+			function(quiz){
+				if (quiz) {
+					req.quiz=quiz;
+					next();
+				}else{
+					next(new Error('No existe quizId = '+quizId));
+				}
+			}).catch(function(error){
+				next(error)});
 };
 
 //GET /quizes
@@ -28,6 +30,41 @@ exports.index=function(req,res){
 		next(error);
 	});
 };
+
+//GET /quizes/busqueda
+exports.busqueda=function(req,res){
+	var texto='%'+req.query.search+'%';
+  	models.Quiz.findAll({where: ["pregunta like ?", texto]}).then(function(quizes){
+  		res.render('quizes/index', {quizes:quizes,
+  			errors: [],tema: tema});
+  	}).catch(function(error){
+  		next(error);
+  	})
+};
+
+/*
+// GET /quizes
+exports.index = function(req, res) {
+	var query = {};
+
+	// Si el usuario hace una búsqueda articulamos el query
+	if(req.query.search) {
+		var search = req.query.search;
+		search = search.replace(' ', '%');
+		search = '%' + search + '%';
+
+		query = {
+			where: [ "pregunta like ?", search ],
+			order: 'pregunta ASC'
+		};
+	}
+	models.Quiz.findAll(query).then(function(quizes) {
+		res.render('quizes/index', { quizes: quizes });
+	}).catch(function(error) {
+		next(error);
+	});
+};
+*/
 
 //GET /quizes/:id
 exports.show=function(req,res){
@@ -58,17 +95,6 @@ exports.answer=function(req,res){
 	res.render('quizes/answer',{quiz: req.quiz,
 			respuesta: resultado,
 			errors: [],tema: tema});
-};
-
-//GET /quizes/busqueda
-exports.busqueda=function(req,res){
-	var texto='%'+req.query.search+'%';
-  	models.Quiz.findAll({where: ["pregunta like ?", texto]}).then(function(quizes){
-  		res.render('quizes/index', {quizes:quizes,
-  			errors: [],tema: tema});
-  	}).catch(function(error){
-  		next(error);
-  	})
 };
 
 //GET /quizes/new
